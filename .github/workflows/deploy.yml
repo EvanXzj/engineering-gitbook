@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  ebook_name: 'softwareengineeringtutorial'
+  ebook_name: 'engineering-gitbook'
 
 jobs:
   job_deploy_website:
