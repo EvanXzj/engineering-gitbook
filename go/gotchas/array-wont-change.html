@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>冒泡算法 · GitBook</title>
+        <title>Array won't change · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,8 +61,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
+    <link rel="next" href="../blog/" />
     
-    <link rel="prev" href="./" />
+    
+    <link rel="prev" href="invalid-memory-address-or-nil-pointer-dereference.html" />
     
 
     </head>
@@ -104,9 +106,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="../">
+        <li class="chapter " data-level="1.2" data-path="../../node/">
             
-                <a href="../">
+                <a href="../../node/">
             
                     
                     Node
@@ -130,9 +132,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="../../go/">
+        <li class="chapter " data-level="1.4" data-path="../">
             
-                <a href="../../go/">
+                <a href="../">
             
                     
                     Go
@@ -144,9 +146,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.1" data-path="../../go/godoc/">
+        <li class="chapter " data-level="1.4.1" data-path="../godoc/">
             
-                <a href="../../go/godoc/">
+                <a href="../godoc/">
             
                     
                     Go Documents
@@ -158,9 +160,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.1.1" data-path="../../go/godoc/errors.html">
+        <li class="chapter " data-level="1.4.1.1" data-path="../godoc/errors.html">
             
-                <a href="../../go/godoc/errors.html">
+                <a href="../godoc/errors.html">
             
                     
                     errors
@@ -176,9 +178,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2" data-path="../../go/gotchas/">
+        <li class="chapter " data-level="1.4.2" data-path="./">
             
-                <a href="../../go/gotchas/">
+                <a href="./">
             
                     
                     Go Gotchas
@@ -190,9 +192,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.2.1" data-path="../../go/gotchas/assignment-to-entry-in-nil-map.html">
+        <li class="chapter " data-level="1.4.2.1" data-path="assignment-to-entry-in-nil-map.html">
             
-                <a href="../../go/gotchas/assignment-to-entry-in-nil-map.html">
+                <a href="assignment-to-entry-in-nil-map.html">
             
                     
                     Assignment to entry in nil map
@@ -203,9 +205,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2.2" data-path="../../go/gotchas/invalid-memory-address-or-nil-pointer-dereference.html">
+        <li class="chapter " data-level="1.4.2.2" data-path="invalid-memory-address-or-nil-pointer-dereference.html">
             
-                <a href="../../go/gotchas/invalid-memory-address-or-nil-pointer-dereference.html">
+                <a href="invalid-memory-address-or-nil-pointer-dereference.html">
             
                     
                     Invalid memory address or nil pointer dereference
@@ -216,9 +218,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2.3" data-path="../../go/gotchas/array-wont-change.html">
+        <li class="chapter active" data-level="1.4.2.3" data-path="array-wont-change.html">
             
-                <a href="../../go/gotchas/array-wont-change.html">
+                <a href="array-wont-change.html">
             
                     
                     Array won't change
@@ -234,9 +236,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.3" data-path="../../go/blog/">
+        <li class="chapter " data-level="1.4.3" data-path="../blog/">
             
-                <a href="../../go/blog/">
+                <a href="../blog/">
             
                     
                     Go Blog
@@ -252,9 +254,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="./">
+        <li class="chapter " data-level="1.5" data-path="../../node/algorithm/">
             
-                <a href="./">
+                <a href="../../node/algorithm/">
             
                     
                     算法
@@ -266,9 +268,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter active" data-level="1.5.1" data-path="bubbleSort.html">
+        <li class="chapter " data-level="1.5.1" data-path="../../node/algorithm/bubbleSort.html">
             
-                <a href="bubbleSort.html">
+                <a href="../../node/algorithm/bubbleSort.html">
             
                     
                     冒泡算法
@@ -314,7 +316,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >冒泡算法</a>
+        <a href="../.." >Array won't change</a>
     </h1>
 </div>
 
@@ -329,8 +331,48 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="&#x5192;&#x6CE1;&#x7B97;&#x6CD5;">&#x5192;&#x6CE1;&#x7B97;&#x6CD5;</h1>
-<p>&#x5176;&#x4E2D;&#x7684;&#x4E00;&#x4E9B;&#x63CF;&#x8FF0;</p>
+                                <h1 id="array-wont-change">Array won&#x2019;t change</h1>
+<p><strong>Why does the array value stick?</strong></p>
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-keyword">func</span> Foo(a [<span class="hljs-number">2</span>]<span class="hljs-keyword">int</span>) {
+    a[<span class="hljs-number">0</span>] = <span class="hljs-number">6</span>
+}
+
+<span class="hljs-keyword">func</span> main() {
+    a := [<span class="hljs-number">2</span>]<span class="hljs-keyword">int</span>{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>}
+    Foo(a) <span class="hljs-comment">// Try to change a[0].</span>
+    fmt.Println(a) <span class="hljs-comment">// Output: [1 2]</span>
+}
+</code></pre>
+<h2 id="answer">Answer</h2>
+<blockquote>
+<ul>
+<li>Arrays in Go are <strong>values</strong></li>
+<li>When you pass an array to a function, <strong>the array is copied.</strong></li>
+</ul>
+</blockquote>
+<p>If you want to Foo to update the elements of a function, use a <strong>Slice</strong> instead.</p>
+<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span>
+
+<span class="hljs-keyword">func</span> Foo(a []<span class="hljs-keyword">int</span>) {
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(a) &gt; <span class="hljs-number">0</span> {
+        a[<span class="hljs-number">0</span>] = <span class="hljs-number">6</span>
+    }
+}
+
+<span class="hljs-keyword">func</span> main() {
+    a := []<span class="hljs-keyword">int</span>{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>}
+    Foo(a) <span class="hljs-comment">// Change a[0].</span>
+    fmt.Println(a)  <span class="hljs-comment">// Output: [6 2]</span>
+}
+</code></pre>
+<p>A slice does not store any data, it just describes a section of an underlying array.</p>
+<p>When you change an element of a slice, you modify the corresponding element of its underlying array, and other slices that share the same underlying array will see the change.</p>
 
                                 
                                 </section>
@@ -358,10 +400,14 @@
 
             
                 
-                <a href="./" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 算法">
+                <a href="invalid-memory-address-or-nil-pointer-dereference.html" class="navigation navigation-prev " aria-label="Previous page: Invalid memory address or nil pointer dereference">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
+                
+                <a href="../blog/" class="navigation navigation-next " aria-label="Next page: Go Blog">
+                    <i class="fa fa-angle-right"></i>
+                </a>
                 
             
         
@@ -370,7 +416,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"冒泡算法","level":"1.5.1","depth":2,"previous":{"title":"算法","level":"1.5","depth":1,"path":"node/algorithm/README.md","ref":"node/algorithm/README.md","articles":[{"title":"冒泡算法","level":"1.5.1","depth":2,"path":"node/algorithm/bubbleSort.md","ref":"node/algorithm/bubbleSort.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["toggle-chapters"],"pluginsConfig":{"toggle-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"node/algorithm/bubbleSort.md","mtime":"2020-10-22T06:40:28.055Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-22T06:41:05.565Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Array won't change","level":"1.4.2.3","depth":3,"next":{"title":"Go Blog","level":"1.4.3","depth":2,"path":"go/blog/README.md","ref":"go/blog/README.md","articles":[]},"previous":{"title":"Invalid memory address or nil pointer dereference","level":"1.4.2.2","depth":3,"path":"go/gotchas/invalid-memory-address-or-nil-pointer-dereference.md","ref":"go/gotchas/invalid-memory-address-or-nil-pointer-dereference.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["toggle-chapters"],"pluginsConfig":{"toggle-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"go/gotchas/array-wont-change.md","mtime":"2020-10-22T06:40:28.055Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-22T06:41:05.565Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
