@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Invalid memory address or nil pointer dereference · GitBook</title>
+        <title>Where is my copy? · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -61,10 +61,10 @@
     <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="array-wont-change.html" />
+    <link rel="next" href="why-does-not-append-not-work-every-time.html" />
     
     
-    <link rel="prev" href="assignment-to-entry-in-nil-map.html" />
+    <link rel="prev" href="what-happened-to-ABBA.html" />
     
 
     </head>
@@ -192,7 +192,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.3.2.2" data-path="invalid-memory-address-or-nil-pointer-dereference.html">
+        <li class="chapter " data-level="1.3.2.2" data-path="invalid-memory-address-or-nil-pointer-dereference.html">
             
                 <a href="invalid-memory-address-or-nil-pointer-dereference.html">
             
@@ -244,7 +244,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2.6" data-path="where-is-my-copy.html">
+        <li class="chapter active" data-level="1.3.2.6" data-path="where-is-my-copy.html">
             
                 <a href="where-is-my-copy.html">
             
@@ -368,7 +368,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../.." >Invalid memory address or nil pointer dereference</a>
+        <a href="../.." >Where is my copy?</a>
     </h1>
 </div>
 
@@ -383,54 +383,41 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="invalid-memory-address-or-nil-pointer-dereference">Invalid memory address or nil pointer dereference</h1>
-<p><strong>Why does this program panic?</strong></p>
-<pre><code class="lang-go"><span class="hljs-keyword">package</span> main
+                                <h1 id="where-is-my-copy">Where is my copy?</h1>
+<p><strong>Why does the copy disappear?</strong></p>
+<pre><code class="lang-go"><span class="hljs-keyword">var</span> src, dst []<span class="hljs-keyword">int</span>
+src = []<span class="hljs-keyword">int</span>{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-built_in">copy</span>(dst, src) <span class="hljs-comment">// Copy elements to dst from src.</span>
+fmt.Println(<span class="hljs-string">&quot;dst:&quot;</span>, dst)
 
-<span class="hljs-keyword">import</span> (
-    <span class="hljs-string">&quot;math&quot;</span>
-    <span class="hljs-string">&quot;fmt&quot;</span>
-)
-
-<span class="hljs-keyword">type</span> Point <span class="hljs-keyword">struct</span> {
-    X, Y <span class="hljs-keyword">float64</span>
-}
-
-<span class="hljs-keyword">func</span> (p *Point) Abs() <span class="hljs-keyword">float64</span> {
-    <span class="hljs-keyword">return</span> math.Sqrt(p.X*p.X + p.Y*p.Y)
-}
-
-<span class="hljs-keyword">func</span> main() {
-    <span class="hljs-keyword">var</span> p *Point
-    fmt.Println(p.Abs())
-}
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// dst: []</span>
 </code></pre>
-<pre><code>panic: runtime error: invalid memory address or nil pointer dereference
-[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x499043]
+<p><strong>Answer</strong></p>
+<p>The number of elements copied by the copy function is the <strong>minimum of len(dst) and len(src)</strong>. To make a full copy, you must allocate a big enough destination slice.</p>
+<pre><code class="lang-go"><span class="hljs-keyword">var</span> src, dst []<span class="hljs-keyword">int</span>
+src = []<span class="hljs-keyword">int</span>{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
 
-goroutine 1 [running]:
-main.(*Point).Abs(...)
-    /tmp/sandbox466157223/prog.go:13
-main.main()
-    /tmp/sandbox466157223/prog.go:18 +0x23
-</code></pre><h2 id="answer">Answer</h2>
-<p><strong>The uninitialized pointer p in the main function is nil, and you can&#x2019;t follow the nil pointer.</strong></p>
-<blockquote>
-<p>If x is nil, an attempt to evaluate *x will cause a run-time panic.</p>
-<p>&#x2014; <a href="https://golang.org/ref/spec#Address_operators" target="_blank">The Go Programming Language Specification: Address operators</a></p>
-</blockquote>
-<p>You need to create a Point</p>
-<pre><code class="lang-go"><span class="hljs-keyword">func</span> main() {
-    <span class="hljs-keyword">var</span> p *Point = <span class="hljs-built_in">new</span>(Point)
-    fmt.Println(p.Abs())
-}
+dst = <span class="hljs-built_in">make</span>([]<span class="hljs-keyword">int</span>, <span class="hljs-built_in">len</span>(src)) <span class="hljs-comment">// Update Here</span>
+
+<span class="hljs-built_in">copy</span>(dst, src) <span class="hljs-comment">// Copy elements to dst from src.</span>
+fmt.Println(<span class="hljs-string">&quot;dst:&quot;</span>, dst)
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// dst: [1 2 3]</span>
 </code></pre>
-<p>Since methods with pointer receivers take either a value or a pointer, you could also skip the pointer altogether:</p>
-<pre><code class="lang-go"><span class="hljs-keyword">func</span> main() {
-    <span class="hljs-keyword">var</span> p Point <span class="hljs-comment">// has zero value Point{X:0, Y:0}</span>
-    fmt.Println(p.Abs())
-}
+<p>The return value of the copy function is the number of elements copied. See Copy function for more about the built-in copy function in Go.</p>
+<p><strong>Using append</strong></p>
+<p>You could also use the append function to make a copy by appending to a nil slice.</p>
+<pre><code class="lang-go"><span class="hljs-keyword">var</span> src, dst []<span class="hljs-keyword">int</span>
+src = []<span class="hljs-keyword">int</span>{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+dst = <span class="hljs-built_in">append</span>(dst, src...)
+fmt.Println(<span class="hljs-string">&quot;dst:&quot;</span>, dst)
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// dst: [1 2 3]</span>
 </code></pre>
+<p>Note that the capacity of the slice allocated by append may be a bit larger than len(src).</p>
 
                                 
                                 </section>
@@ -458,12 +445,12 @@ main.main()
 
             
                 
-                <a href="assignment-to-entry-in-nil-map.html" class="navigation navigation-prev " aria-label="Previous page: Assignment to entry in nil map">
+                <a href="what-happened-to-ABBA.html" class="navigation navigation-prev " aria-label="Previous page: What happened to ABBA?">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="array-wont-change.html" class="navigation navigation-next " aria-label="Next page: Array won't change">
+                <a href="why-does-not-append-not-work-every-time.html" class="navigation navigation-next " aria-label="Next page: Why doesn’t append work every time?">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -474,7 +461,7 @@ main.main()
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Invalid memory address or nil pointer dereference","level":"1.3.2.2","depth":3,"next":{"title":"Array won't change","level":"1.3.2.3","depth":3,"path":"go/gotchas/array-wont-change.md","ref":"go/gotchas/array-wont-change.md","articles":[]},"previous":{"title":"Assignment to entry in nil map","level":"1.3.2.1","depth":3,"path":"go/gotchas/assignment-to-entry-in-nil-map.md","ref":"go/gotchas/assignment-to-entry-in-nil-map.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["toggle-chapters"],"pluginsConfig":{"toggle-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"go/gotchas/invalid-memory-address-or-nil-pointer-dereference.md","mtime":"2020-11-06T01:49:22.780Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-11-06T01:49:58.827Z"},"basePath":"../..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Where is my copy?","level":"1.3.2.6","depth":3,"next":{"title":"Why doesn’t append work every time?","level":"1.3.2.7","depth":3,"path":"go/gotchas/why-does-not-append-not-work-every-time.md","ref":"go/gotchas/why-does-not-append-not-work-every-time.md","articles":[]},"previous":{"title":"What happened to ABBA?","level":"1.3.2.5","depth":3,"path":"go/gotchas/what-happened-to-ABBA.md","ref":"go/gotchas/what-happened-to-ABBA.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["toggle-chapters"],"pluginsConfig":{"toggle-chapters":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"go/gotchas/where-is-my-copy.md","mtime":"2020-11-06T01:49:22.780Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-11-06T01:49:58.827Z"},"basePath":"../..","book":{"language":""}});
         });
     </script>
 </div>
